@@ -1,0 +1,156 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: GOA_ExcelEPPLus unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #GOA_ExcelEPPLus
+    PROPERTIES
+      Name                #GOA_ExcelEPPLus
+      Origin              #{7176D56C-0730-4DAB-A21C-8680FF051519}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #classDeclaration
+        #class GOA_ExcelEPPLus
+        #{
+        #    OfficeOpenXml.ExcelPackage      ExcelPkg;
+        #    OfficeOpenXml.ExcelWorkbook     ExcelWorkbook;
+        #    OfficeOpenXml.ExcelWorksheets   ExcelWorksheets;
+        #    OfficeOpenXml.ExcelWorksheet    ExcelWorksheet;
+        #    OfficeOpenXml.ExcelRange        ExcelRange;
+        #    System.IO.FileInfo              fileInfo;
+        #}
+      ENDSOURCE
+      SOURCE #Close
+        #public void Close(boolean _Save = false)
+        #{
+        #    if(_Save)
+        #        ExcelPkg.Save();
+        #    ExcelPkg.Dispose();
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #public void new(System.IO.FileInfo _newFileInfo, System.IO.FileInfo _tmpFileInfo)
+        #{
+        #    ExcelPkg = new OfficeOpenXml.ExcelPackage(_newFileInfo, _tmpFileInfo);
+        #    fileInfo = _newFileInfo;
+        #    ExcelWorkbook = ExcelPkg.get_Workbook();
+        #    ExcelWorksheets = ExcelWorkbook.get_Worksheets();
+        #}
+      ENDSOURCE
+      SOURCE #Save
+        #public void Save()
+        #{
+        #    ExcelPkg.Save();
+        #}
+      ENDSOURCE
+      SOURCE #setCellValue
+        #public void setCellValue(int _iCol, int _iRow, Anytype _Value)
+        #{
+        #    Bookmark                    bookmark;
+        #    OfficeOpenXml.ExcelRange    Cell;
+        #
+        #    bookmark = GOA_ExcelEPPLus::numToNameCell(_iCol,_iRow);
+        #    Cell = ExcelRange.get_Item(bookmark);
+        #    Cell.set_Value(_Value);
+        #}
+      ENDSOURCE
+      SOURCE #setCurrentWorksheet
+        #public void setCurrentWorksheet(str _Name)
+        #{
+        #    ExcelWorksheet = ExcelWorksheets.get_Item(_Name);
+        #    ExcelRange = ExcelWorksheet.get_Cells();
+        #}
+      ENDSOURCE
+      SOURCE #ShowFile
+        #public boolean ShowFile(str _Macros='')
+        #{
+        #    COMVariant  COMVariant;
+        #    COM COMObj;
+        #    SysExcelApplication application;
+        #    SysExcelApplication excel;
+        #    SysExcelWorkbooks workbooks;
+        #    SysExcelWorkbook workbook;
+        #    Filename fileName;
+        #
+        #    COMVariant = new COMVariant();
+        #    fileName = fileInfo.get_FullName();
+        #    COMVariant.bStr(fileName);
+        #    application = SysExcelApplication::construct();
+        #    workbooks = application.workbooks();
+        #    workbook = workbooks.add(COMVariant);
+        #
+        #    if(_Macros)
+        #    {
+        #        COMObj = application.comObject();
+        #        COMObj.Run(_Macros);
+        #    }
+        #
+        #    return application.visible(true);
+        #}
+      ENDSOURCE
+      SOURCE #GOA_Version
+        #public static FreeTxt GOA_Version()
+        #{
+        #    FreeTxt versionStr;
+        #    str     cr = '\n';
+        #    ;
+        #    versionStr += @'All what you need is: https://www.nuget.org/packages/EPPlus/' + cr;
+        #    versionStr += @'      refresh the reference of EPPlus' + cr;
+        #
+        #
+        #    return versionStr;
+        #}
+      ENDSOURCE
+      SOURCE #numToNameCell
+        #// Convert column & string numbers to cell name
+        #// iCol -> Column number
+        #// iRow -> String number
+        ##define.maxCol(256)
+        ##define.A('A')
+        ##define.Z('Z')
+        #public static str numToNameCell(int _iCol, int _iRow)
+        #{
+        #    int iCharCodeA = char2num(#A, 1) - 1;
+        #    int iBase = char2num(#Z, 1) - char2num(#A, 1) + 1;
+        #    int iDiv, iMod;
+        #    str szRet = "";
+        #    ;
+        #    if (_iCol > #maxCol)
+        #        throw error("@GLS105135");
+        #
+        #    iDiv = _iCol;
+        #    iMod = iDiv mod iBase;
+        #    iDiv = iDiv div iBase;
+        #    if (iDiv - 1 > 0 || (iDiv == 1 && iMod))
+        #    {
+        #        if (iMod)
+        #        {
+        #            szRet = num2char(iDiv + iCharCodeA);
+        #        }
+        #        else
+        #        {
+        #            szRet = num2char(iDiv - 1 + iCharCodeA);
+        #        }
+        #    }
+        #    if (iMod)
+        #    {
+        #         szRet += num2char(iMod + iCharCodeA);
+        #    }
+        #    else
+        #    {
+        #         szRet += num2char(iBase + iCharCodeA);
+        #    }
+        #    szRet += int2str(_iRow);
+        #
+        #    return szRet;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END

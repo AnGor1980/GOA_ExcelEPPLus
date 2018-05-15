@@ -1,0 +1,63 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: GOA_InventTableExportContract unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #GOA_InventTableExportContract
+    PROPERTIES
+      Name                #GOA_InventTableExportContract
+      Origin              #{B69F6DED-9763-420E-8D08-D07148C65076}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #classDeclaration
+        #[DataContractAttribute]
+        #class GOA_InventTableExportContract
+        #{
+        #    str             packedQuery;
+        #    FilePath        filePath;
+        #}
+      ENDSOURCE
+      SOURCE #getQuery
+        #public Query getQuery()
+        #{
+        #    return new Query(SysOperationHelper::base64Decode(packedQuery));
+        #}
+      ENDSOURCE
+      SOURCE #parmFilePath
+        #[
+        #    DataMemberAttribute
+        #]
+        #public FilePath parmFilePath(FilePath _filePath = filePath)
+        #{
+        #    filePath = _filePath;
+        #
+        #    return filePath;
+        #}
+      ENDSOURCE
+      SOURCE #parmPackedQuery
+        #[
+        #    DataMemberAttribute,
+        #    AifQueryTypeAttribute('_packedQuery', queryStr(InventTable))
+        #]
+        #public str parmPackedQuery(str _packedQuery = packedQuery)
+        #{
+        #    packedQuery = _packedQuery;
+        #
+        #    return packedQuery;
+        #}
+      ENDSOURCE
+      SOURCE #setQuery
+        #public void setQuery(Query _query)
+        #{
+        #    packedQuery = SysOperationHelper::base64Encode(_query.pack());
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END

@@ -1,0 +1,77 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: GOA_InventTableExportDataService unloaded
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #GOA_InventTableExportDataService
+    PROPERTIES
+      Name                #GOA_InventTableExportDataService
+      Origin              #{FDAA28AC-4A46-4E12-B6E7-8F8572108A46}
+    ENDPROPERTIES
+    
+    METHODS
+      SOURCE #classDeclaration
+        #class GOA_InventTableExportDataService
+        #{
+        #    GOA_ExcelEPPLus ExcelEPPLus;
+        #}
+      ENDSOURCE
+      SOURCE #exportTable
+        #[SysEntryPointAttribute]
+        #public void exportTable(GOA_InventTableExportContract _InventTableExportContract)
+        #{
+        #    #define.Data("db")
+        #    QueryRun    queryRun;
+        #    InventTable inventTable;
+        #    int row = 2;
+        #    int c;
+        #    FileIOPermission fioPermission = new FileIOPermission(_InventTableExportContract.parmFilePath(), "w");
+        #
+        #    fioPermission.assert();
+        #    queryRun = new queryRun(_InventTableExportContract.getQuery());
+        #    this.initRepEPP(_InventTableExportContract.parmFilePath());
+        #    ExcelEPPLus.setCurrentWorksheet(#Data);
+        #    while(queryRun.next())
+        #    {
+        #        c = 1;
+        #        inventTable = queryRun.get(tableNum(InventTable));
+        #        ExcelEPPLus.setCellValue(c, row, inventTable.ItemId); c++;
+        #        ExcelEPPLus.setCellValue(c, row, inventTable.BOMUnitId); c++;
+        #        row++;
+        #    }
+        #    ExcelEPPLus.Close(true);
+        #    CodeAccessPermission::revertAssert();
+        #
+        #}
+      ENDSOURCE
+      SOURCE #initRepEPP
+        #private void initRepEPP(FilePath _FilePath)
+        #{
+        #    System.IO.FileInfo      newFileInfo;
+        #    System.IO.FileInfo      tmpFileInfo;
+        #
+        #    //Filename    newFileName = System.IO.Path::GetTempPath().toString() +  "InventTableTMP.xlsx";
+        #
+        #    Filename    tmpFileName = TemplateProvider_RU::getFor(this).get(resourceStr(GOA_InventTableTMP));
+        #
+        #    newFileInfo = new System.IO.FileInfo(_FilePath);
+        #    tmpFileInfo = new System.IO.FileInfo(tmpFileName);
+        #
+        #    ExcelEPPLus = new GOA_ExcelEPPLus(newFileInfo, tmpFileInfo);
+        #}
+      ENDSOURCE
+      SOURCE #showRepEPP
+        #private void showRepEPP()
+        #{
+        #    ExcelEPPLus.Close(true);
+        #    ExcelEPPLus.ShowFile();
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END

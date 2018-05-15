@@ -1,0 +1,23 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: FTM
+
+; Microsoft Dynamics AX MENUITEM : GOA_InventTableExportDataService unloaded
+; --------------------------------------------------------------------------------
+  VERSION 1
+  
+  MENUITEM #GOA_InventTableExportDataService
+    Type: 2
+    PROPERTIES
+      Name                #GOA_InventTableExportDataService
+      ObjectType          #Class
+      Object              #SysOperationServiceController
+      Parameters          #GOA_InventTableExportDataService.exportTable
+      Origin              #{CA7C20A0-2D79-44BB-B7FF-AC82AFAF8505}
+    ENDPROPERTIES
+    
+  ENDMENUITEM
+  
+
+***Element: END

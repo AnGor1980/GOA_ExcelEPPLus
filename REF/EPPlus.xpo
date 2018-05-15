@@ -1,0 +1,28 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: REF
+
+; Microsoft Dynamics AX REFERENCE : EPPlus unloaded
+; --------------------------------------------------------------------------------
+  VERSION 1
+  
+  REFERENCE #EPPlus
+    PROPERTIES
+      Name                #EPPlus
+      AssemblyName        #EPPlus
+      AssemblyDisplayName #EPPlus, Version=4.5.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1
+      Culture             #
+      PublicKeyToken      #ea159fdaa78159a1
+      Version             #4.5.1.0
+      ServiceReference    #No
+      WSDLURL             #
+      .NETCodeNamespace   #
+      ServiceDescription  #
+      Origin              #{8D48809F-9699-4407-B4A1-4C1F1FB026CA}
+    ENDPROPERTIES
+    
+  ENDREFERENCE
+  
+
+***Element: END
